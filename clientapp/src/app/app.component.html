@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <h1>Employee Form </h1>
+
+  <div class="alert alert-danger" *ngIf="errorMsg">
+    {{errorMsg}}
+  </div>
+  <form #employeeForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
+    {{employeeForm.form.valid}}
+    <!--{{ userForm.value | json}}
+    <hr/>
+    {{ employeeModule | json }}-->
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" required #name="ngModel"
+             [class.is-invalid]="name.invalid && name.touched"
+             class="form-control" name="employeename" [(ngModel)]="employeeModel.name">
+      <small class="text-danger" [class.d-none]="name.valid || name.untouched">Name is Required</small>
+    </div>
+  
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email"  class="form-control" name="email" [(ngModel)]="employeeModel.email">
+    </div>
+     <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" #phone="ngModel" pattern="^\d{10}$" required
+             [class.is-invalid]="phone.invalid && phone.touched"
+             class="form-control" name="phone" [(ngModel)]="employeeModel.phone">
+        <!--<small class="text-danger"
+               [class.d-none]="phone.valid || phone.untouched">Phone Number is required and Must Be in 10 Digit
+       </small>-->
+       <div *ngIf="phone.errors && (phone.invalid || phone.touched) ">
+         <small class="text-danger" *ngIf="phone.errors.required">phone number is required</small>
+            <small class="text-danger" *ngIf="phone.errors.pattern">phone number must be 10 digit</small>
+
+       </div>
+    </div>
+     <div class="form-group">
+       <select required #department="ngModel"[class.is-invalid]="department.invalid && department.touched" class="custom-select" name="department" [(ngModel)]="employeeModel.department">
+         <option value="">department</option>
+         <option *ngFor="let department of departments">{{ department }}</option>
+       </select>
+       <small class="text-danger" [class.d-none]="department.valid || department.untouched"> "Please choose department" </small>
+     </div>
+    <div class="mb-3">
+      <label>Shift</label>
+      <div class="form-check">
+      <input class="form-check-input" [(ngModel)]="employeeModel.shift" type="radio" name="Shift" value="morning">
+      <label class="=form-check-label">Morning(9AM-5PM)</label>
+        </div>
+      <div class="form-check">
+      <input class="form-check-input" [(ngModel)]="employeeModel.shift" type="radio" name="Shift" value="evening">
+      <label class="=form-check-label">Evening(6pM-2AM)</label>
+        </div>
+    </div>
+    <div class="form-check mb-3">
+       <input class="form-check-input" name="skills" [(ngModel)]="employeeModel.skill" type="checkbox">
+      <label class="=form-check-label">Skills</label>
+    </div>
+    <button [disabled]="employeeForm.form.invalid" class="btn btn-primary" type="submit">Submit</button>
+  </form>
+</div>
